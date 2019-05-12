@@ -133,8 +133,17 @@ logging.info(gtex.index)
 
 gtex.set_index(['Description', 'Name'], inplace=True)
 logging.info('creating column lists')
-tissue_list = [gtex_attr.loc[col]['SMTS'] for col in gtex.columns]
-subtype_list = [gtex_attr.loc[col]['SMTSD'] for col in gtex.columns]
+#tissue_list = [gtex_attr.loc[col]['SMTS'] for col in gtex.columns]
+#subtype_list = [gtex_attr.loc[col]['SMTSD'] for col in gtex.columns]
+tissue_list = list()
+subtype_list = list()
+for sample in gtex.columns:
+    if sample in gtex_attr.index:
+        tissue_list.append(gtex_attr.loc[sample]['SMTS'])
+        subtype_list.append(gtex_attr.loc[sample]['SMTSD'])
+    else:
+        tissue_list.append('Missing Data')
+        subtype_list.append('Missing Data')
 logging.info('adding multiindex columns')
 gtex.columns = [tissue_list, subtype_list, gtex.columns]
 logging.info(gtex.info())
@@ -145,6 +154,9 @@ safelog2 = lambda x: numpy.log2(x) if x else numpy.nan
 gtex = gtex.applymap(safelog2)
 logging.info(gtex.info())
 logging.info(gtex.describe())
-out_fn = os.path.join(cache_dir, 'gtex_log2.tsv')
+
+if not os.path.exists(os.path.join(cache_dir, 'preprocess')):
+    os.makedirs(os.path.join(cache_dir, 'preprocess'))
+out_fn = os.path.join(cache_dir, 'preprocess', 'gtex_log2.tsv')
 logging.info('Saving to %s', os.path.abspath(out_fn))
 gtex.to_csv(out_fn, sep='\t', header=True, index=True)
