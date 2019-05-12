@@ -128,11 +128,10 @@ logging.info('\t finished loading gtex')
 logging.info(gtex.info())
 # Set up multindex values
 logging.info('resetting index')
-logging.info(gtex.columns.head())
-logging.info(gtex.index.head())
+logging.info(gtex.columns)
+logging.info(gtex.index)
 
-
-gtex.set_index(['Description', 'gene_id'], inplace=True)
+gtex.set_index(['Description', 'Name'], inplace=True)
 logging.info('creating column lists')
 tissue_list = [gtex_attr.loc[col]['SMTS'] for col in gtex.columns]
 subtype_list = [gtex_attr.loc[col]['SMTSD'] for col in gtex.columns]
