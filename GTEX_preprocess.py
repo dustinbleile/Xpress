@@ -109,7 +109,6 @@ for tissue in tissue_types:
     for subtype in gtex_attr[gtex_attr['SMTS'] == tissue]['SMTSD'].unique():
         # Get all samples by subtype
         tissue_dict[tissue]['subtypes'][subtype] = gtex_attr[gtex_attr['SMTSD'] == subtype]['SAMPID'].to_list()
-    
 
     sorted(gtex_attr[gtex_attr['SMTS'] == tissue]['SMTSD'].unique())
 tissue_subtypes = sorted(gtex_attr['SMTSD'].unique())
@@ -126,9 +125,13 @@ for tissue in sorted(tissue_dict.keys()):
 logging.info('Loading the full GTEX table...')
 gtex = pandas.read_csv(gtex_tpm_fn, sep='\t', skiprows=2)
 logging.info('\t finished loading gtex')
-
+logging.info(gtex.info())
 # Set up multindex values
 logging.info('resetting index')
+logging.info(gtex.columns.head())
+logging.info(gtex.index.head())
+
+
 gtex.set_index(['Description', 'gene_id'], inplace=True)
 logging.info('creating column lists')
 tissue_list = [gtex_attr.loc[col]['SMTS'] for col in gtex.columns]
