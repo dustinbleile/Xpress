@@ -65,7 +65,7 @@ if not os.path.exists(cache_dir):
 gtex_tpm_link = 'https://storage.googleapis.com/gtex_analysis_v7/rna_seq_data/GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_gene_tpm.gct.gz'
 gtex_tpm_fn = os.path.join(cache_dir, 'GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_gene_tpm.gct.gz')
 # Using unzipped version
-gtex_tpm_fn = os.path.join(cache_dir, 'GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_gene_tpm.gct')
+# gtex_tpm_fn = os.path.join(cache_dir, 'GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_gene_tpm.gct')
 if not os.path.exists(gtex_tpm_fn):
     print("downloading {}".format(gtex_tpm_link))
     urllib.request.urlretrieve(gtex_tpm_link, gtex_tpm_fn)
@@ -124,7 +124,7 @@ for tissue in sorted(tissue_dict.keys()):
 
 
 logging.info('Loading the full GTEX table...')
-gtex = pandas.read_table(gtex_tpm_fn, sep='\t', skiprows=2)
+gtex = pandas.read_csv(gtex_tpm_fn, sep='\t', skiprows=2)
 logging.info('\t finished loading gtex')
 
 # Set up multindex values
