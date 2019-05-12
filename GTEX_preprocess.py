@@ -131,13 +131,18 @@ logging.info('resetting index')
 logging.info(gtex.columns)
 logging.info(gtex.index)
 
-gtex.set_index(['Description', 'Name'], inplace=True)
+sample_cols = [c for c in gtex.columns if c not in ('Description', 'Name')]
+gtex['ensid'] = gtex['Name'].apply(lambda x: x.split('.')[0])
+gtex['ens_ver'] = gtex['Name'].apply(lambda x: x.split('.')[-1])
+gtex.rename(columns={'Description': 'Symbol'}, inplace=True)
+gtex.drop('Name', inplace=True)
+gtex.set_index(['Symbol', 'ensid', 'ens_ver'], inplace=True)
 logging.info('creating column lists')
-#tissue_list = [gtex_attr.loc[col]['SMTS'] for col in gtex.columns]
-#subtype_list = [gtex_attr.loc[col]['SMTSD'] for col in gtex.columns]
+#tissue_list = [gtex_attr.loc[col]['SMTS'] for col in sample_cols]
+#subtype_list = [gtex_attr.loc[col]['SMTSD'] for col in sample_cols]
 tissue_list = list()
 subtype_list = list()
-for sample in gtex.columns:
+for sample in sample_cols:
     if sample in gtex_attr.index:
         tissue_list.append(gtex_attr.loc[sample]['SMTS'])
         subtype_list.append(gtex_attr.loc[sample]['SMTSD'])
@@ -160,3 +165,9 @@ if not os.path.exists(os.path.join(cache_dir, 'preprocess')):
 out_fn = os.path.join(cache_dir, 'preprocess', 'gtex_log2.tsv')
 logging.info('Saving to %s', os.path.abspath(out_fn))
 gtex.to_csv(out_fn, sep='\t', header=True, index=True)
+
+row = gtex.iloc[0]
+print(row)
+import pdb
+pdb.set_trace()
+
