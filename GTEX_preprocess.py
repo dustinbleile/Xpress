@@ -141,7 +141,7 @@ gtex_attr.set_index('SAMPID', inplace=True)
 
 def subtype_rename(subtype):
     if ' - ' in subtype:
-        if subtype.startwith('Kidney - '):
+        if subtype.startswith('Kidney - '):
             return 'Kidney'
         elif subtype.startswith('Nerve - '):
             return 'Nerve'
@@ -151,17 +151,10 @@ def subtype_rename(subtype):
 tissue_list = [gtex_attr.loc[col]['SMTS'] for col in sample_cols]
 gtex_attr['subtype'] = gtex_attr['SMTSD'].apply(subtype_rename)
 subtype_list = [gtex_attr.loc[col]['subtype'] for col in sample_cols]
-#tissue_list = list()
-#subtype_list = list()
-#for sample in sample_cols:
-#    if sample in gtex_attr.index:
-#        tissue_list.append(gtex_attr.loc[sample]['SMTS'])
-#        subtype_list.append(gtex_attr.loc[sample]['SMTSD'])
-#    else:
-#        tissue_list.append('Missing Data')
-#        subtype_list.append('Missing Data')
+
 logging.info('adding multiindex columns')
 gtex.columns = [tissue_list, subtype_list, sample_cols]
+gtex.columns.names = ['tissue', 'subtype', 'sample']
 logging.info(gtex.info())
 logging.info(gtex.describe())
 logging.info('applying safelog2 transform')
@@ -175,17 +168,32 @@ if not os.path.exists(os.path.join(cache_dir, 'preprocess')):
     os.makedirs(os.path.join(cache_dir, 'preprocess'))
 
 logging.info('Calculating %s', 'gtex_log2tpm.describe.tsv')
-out_fn = os.path.join(cache_dir, 'preprocess', 'gtex_log2tpm.describe.tsv')
+out_fn = os.path.join(cache_dir, 'preprocess', 'gtex_log2tpm_all.describe.tsv')
 desc = gtex.T.describe().T
+desc['skew'] = gtex.apply(lambda row: row.skew(), axis=1)
+desc['kurtosis'] = gtex.apply(lambda row: row.kurtosis(), axis=1)
 desc.to_csv(out_fn, sep='\t', header=True, index=True)
 logging.info('wrote %s', os.path.abspath(out_fn))
 
-out_fn = os.path.join(cache_dir, 'preprocess', 'gtex_log2.tsv')
-logging.info('Saving to %s', os.path.abspath(out_fn))
-gtex.to_csv(out_fn, sep='\t', header=True, index=True)
+for tissue in sorted(set(tissue_list)):
+    logging.info("Calculating '%s' statistics", tissue)
+    gt = gtex.loc[:, tissue]
+    subtypes = sorted(set([i[0] for i in gt.columns.to_flat_index()]))
+    for subtype in subtypes:
+        out_fn = os.path.join(cache_dir, 'preprocess', 'gtex_log2tpm_{}__{}.describe.tsv'.format(tissue, subtype))
+        logging.info('Calculating %s: %s', tissue, subtype)
+        gts = gtex.loc[:, gtex.columns.get_level_values('subtype') == subtype]        
+        desc = gts.T.describe().T
+        desc['skew'] = gts.apply(lambda row: row.skew(), axis=1)
+        desc['kurtosis'] = gts.apply(lambda row: row.kurtosis(), axis=1)
+        desc.to_csv(out_fn, sep='\t', header=True, index=True)
+        logging.info('wrote %s', os.path.abspath(out_fn))
+    if len(subtypes) > 1:
+        out_fn = os.path.join(cache_dir, 'preprocess', 'gtex_log2tpm_{}__{}.describe.tsv'.format(tissue, 'all'))
+        desc = gt.T.describe().T
+        desc['skew'] = gt.apply(lambda row: row.skew(), axis=1)
+        desc['kurtosis'] = gt.apply(lambda row: row.kurtosis(), axis=1)
+        desc.to_csv(out_fn, sep='\t', header=True, index=True)
+        logging.info('wrote %s', os.path.abspath(out_fn))
 
-row = gtex.iloc[0]
-print(row)
-import pdb
-pdb.set_trace()
 
