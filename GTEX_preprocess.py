@@ -121,7 +121,6 @@ for tissue in sorted(tissue_dict.keys()):
         for subtype in sorted(tissue_dict[tissue]['subtypes'].keys()):
             logging.info('\t%s (n=%s)', subtype, len(tissue_dict[tissue]['subtypes'][subtype]))
 
-
 logging.info('Loading the full GTEX table...')
 gtex = pandas.read_csv(gtex_tpm_fn, sep='\t', skiprows=2)
 logging.info('\t finished loading gtex')
@@ -135,22 +134,34 @@ sample_cols = [c for c in gtex.columns if c not in ('Description', 'Name')]
 gtex['ensid'] = gtex['Name'].apply(lambda x: x.split('.')[0])
 gtex['ens_ver'] = gtex['Name'].apply(lambda x: x.split('.')[-1])
 gtex.rename(columns={'Description': 'Symbol'}, inplace=True)
-gtex.drop('Name', inplace=True)
+gtex.drop('Name', inplace=True, axis=1)
 gtex.set_index(['Symbol', 'ensid', 'ens_ver'], inplace=True)
 logging.info('creating column lists')
-#tissue_list = [gtex_attr.loc[col]['SMTS'] for col in sample_cols]
-#subtype_list = [gtex_attr.loc[col]['SMTSD'] for col in sample_cols]
-tissue_list = list()
-subtype_list = list()
-for sample in sample_cols:
-    if sample in gtex_attr.index:
-        tissue_list.append(gtex_attr.loc[sample]['SMTS'])
-        subtype_list.append(gtex_attr.loc[sample]['SMTSD'])
-    else:
-        tissue_list.append('Missing Data')
-        subtype_list.append('Missing Data')
+gtex_attr.set_index('SAMPID', inplace=True)
+
+def subtype_rename(subtype):
+    if ' - ' in subtype:
+        if subtype.startwith('Kidney - '):
+            return 'Kidney'
+        elif subtype.startswith('Nerve - '):
+            return 'Nerve'
+        else:
+            return subtype.split(' - ')[-1]
+    return subtype
+tissue_list = [gtex_attr.loc[col]['SMTS'] for col in sample_cols]
+gtex_attr['subtype'] = gtex_attr['SMTSD'].apply(subtype_rename)
+subtype_list = [gtex_attr.loc[col]['subtype'] for col in sample_cols]
+#tissue_list = list()
+#subtype_list = list()
+#for sample in sample_cols:
+#    if sample in gtex_attr.index:
+#        tissue_list.append(gtex_attr.loc[sample]['SMTS'])
+#        subtype_list.append(gtex_attr.loc[sample]['SMTSD'])
+#    else:
+#        tissue_list.append('Missing Data')
+#        subtype_list.append('Missing Data')
 logging.info('adding multiindex columns')
-gtex.columns = [tissue_list, subtype_list, gtex.columns]
+gtex.columns = [tissue_list, subtype_list, sample_cols]
 logging.info(gtex.info())
 logging.info(gtex.describe())
 logging.info('applying safelog2 transform')
@@ -162,6 +173,13 @@ logging.info(gtex.describe())
 
 if not os.path.exists(os.path.join(cache_dir, 'preprocess')):
     os.makedirs(os.path.join(cache_dir, 'preprocess'))
+
+logging.info('Calculating %s', 'gtex_log2tpm.describe.tsv')
+out_fn = os.path.join(cache_dir, 'preprocess', 'gtex_log2tpm.describe.tsv')
+desc = gtex.T.describe().T
+desc.to_csv(out_fn, sep='\t', header=True, index=True)
+logging.info('wrote %s', os.path.abspath(out_fn))
+
 out_fn = os.path.join(cache_dir, 'preprocess', 'gtex_log2.tsv')
 logging.info('Saving to %s', os.path.abspath(out_fn))
 gtex.to_csv(out_fn, sep='\t', header=True, index=True)
