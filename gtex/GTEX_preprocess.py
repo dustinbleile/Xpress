@@ -364,7 +364,7 @@ class GtexData(ExpressionData):
 
 if __name__ == '__main__':
     gtex = GtexData()
-    if os.path.exists('/gsc/resources/expression/GTEx/v7')
+    if os.path.exists('/gsc/resources/expression/GTEx/v7'):
         gtex.preprocess(cache_dir='/gsc/resources/expression/GTEx/v7')
     else:
         gtex.preprocess()
