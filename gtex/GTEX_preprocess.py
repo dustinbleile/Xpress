@@ -65,6 +65,9 @@ class GtexData(ExpressionData):
         self.cache_data()
 
     def tissues(self):
+        """
+        All possible samples, that may not exist in the current table
+        """
         if self.tissue_dict is not None:
             return self.tissue_dict
 
@@ -287,16 +290,6 @@ class GtexData(ExpressionData):
         low.to_csv(low_fn, sep='\t', header=True, index=True)
         low = pandas.read_csv(low_fn, sep='\t')
 
-        #logging.info('Finding low expression genes set.')
-        #low_exp = self.low_expression_genes_table(gtex=gtex)
-        #low_exp.to_csv(os.path.join(cache_dir, 'preprocess', 'GTEX_low_expr.tsv'), index=True, header=True, sep='\t')
-        #sys.exit()
-        #td = self.tissues()
-        #for tissue in sorted(td.keys()):
-        #    logging.info("Calculating '%s' statistics", tissue)
-        #    subtypes = sorted(td[tissue]['subtypes'].keys())
-        #    for subtype in subtypes:
-        #        pass
         logging.info('Filtering out low expression genes before applying log2 transform')
         low_symbols = sorted(low['Description'].tolist())
 
