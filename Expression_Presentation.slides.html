@@ -13767,7 +13767,8 @@ where "mean transcript length" is the expression-weighted mean of the lengths of
 
 </div>
 </div>
-</div>
+</div><aside class="notes">
+
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -13778,6 +13779,8 @@ where "mean transcript length" is the expression-weighted mean of the lengths of
 </div>
 </div>
 </div>
+</aside><aside class="notes">
+
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -13785,6 +13788,8 @@ where "mean transcript length" is the expression-weighted mean of the lengths of
 </div>
 </div>
 </div>
+</aside><aside class="notes">
+
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -13808,6 +13813,8 @@ where "mean transcript length" is the expression-weighted mean of the lengths of
 </div>
 </div>
 </div>
+</aside><aside class="notes">
+
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -13826,162 +13833,8 @@ where "mean transcript length" is the expression-weighted mean of the lengths of
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">gtex</span> <span class="k">import</span> <span class="n">GTEX_preprocess</span>
-<span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">GTEX_preprocess</span><span class="p">)</span>
-<span class="n">gtex</span> <span class="o">=</span> <span class="n">GTEX_preprocess</span><span class="o">.</span><span class="n">GtexData</span><span class="p">()</span>
-</pre></div>
+</aside><aside class="notes">
 
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2019-08-22 12:02:03 - root - INFO - logging
-2019-08-22 12:02:03 - root - INFO - logging
-2019-08-22 12:02:03 - root - INFO - Found: /home/dbleile/science/Xpress/gtex/data_cache/GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_gene_tpm.gct
-2019-08-22 12:02:03 - root - INFO - Found: /home/dbleile/science/Xpress/gtex/data_cache/GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_gene_median_tpm.gct
-2019-08-22 12:02:03 - root - INFO - Found: /home/dbleile/science/Xpress/gtex/data_cache/GTEx_v7_Annotations_SampleAttributesDS.txt
-2019-08-22 12:02:03 - root - INFO - Found: /home/dbleile/science/Xpress/gtex/data_cache/GTEx_Analysis_v7_Annotations_SampleAttributesDD.xlsx
-2019-08-22 12:02:03 - root - INFO - Found: /home/dbleile/science/Xpress/gtex/data_cache/GTEx_v7_Annotations_SubjectPhenotypesDS.txt
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tp53</span> <span class="o">=</span> <span class="n">gtex</span><span class="o">.</span><span class="n">gtex_gene_table</span><span class="p">([</span><span class="s1">&#39;TP53&#39;</span><span class="p">,</span> <span class="s1">&#39;PTEN&#39;</span><span class="p">])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2019-08-22 12:02:03 - root - INFO - Loading reference GTEX7 row table
-2019-08-22 12:02:34 - root - INFO - loading 3 GTEX TPM rows
-2019-08-22 12:02:44 - root - INFO - Gtex TPM partial table took 0.6869680285453796 minutes
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">gtpm</span> <span class="o">=</span> <span class="n">gtex</span><span class="o">.</span><span class="n">gtex_gene_table</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2019-08-22 12:02:44 - root - INFO - loading all rows
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">gtpm</span> <span class="o">=</span> <span class="n">gtmp</span>
-<span class="n">gtpm</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[1]:</div>
@@ -14032,6 +13885,8 @@ where "mean transcript length" is the expression-weighted mean of the lengths of
 </div>
 
 </div>
+</aside><aside class="notes">
+
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
@@ -14072,7 +13927,8 @@ where "mean transcript length" is the expression-weighted mean of the lengths of
 </div>
 </div>
 
-</div></section></section>
+</div>
+</aside></section></section>
 </div>
 </div>
 
